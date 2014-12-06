@@ -20,37 +20,68 @@ import Material 0.1
 
 View {
     id: button
-    height: units.dp(36)
-    width: Math.max(units.dp(64), label.width + units.dp(16))
 
-    radius: units.dp(2)
+    height:(type != buttonType.floating) ? units.dp(36) : units.dp(56)
+    width: (type != buttonType.floating) ? Math.max(units.dp(64), label.width + units.dp(16)) : height
 
-    property bool raised
-
+    radius: (type != buttonType.floating) ? units.dp(2) : units.dp(56)
+    property int type: buttonType.raised
+    property alias buttonType: buttonType
     property string text
+    property string iconName
     property color textColor: Theme.lightDark(backgroundColor, Theme.light.textColor,
                                                                   Theme.dark.textColor)
-
+    elevation: (type == buttonType.flat) ? 0 : 1
     signal triggered
 
     tintColor: mouseArea.pressed ? Qt.rgba(0,0,0, 0.1) : "transparent"
 
+    backgroundColor: {
+        if (type == buttonType.flat)
+            Theme.backgroundColor
+        else if (type == buttonType.raised)
+            Theme.primaryColor
+        else
+            Theme.accentColor
+    }
+
     Ink {
         id: mouseArea
         anchors.fill: parent
+
         onClicked: {
             button.triggered()
         }
     }
 
-    Label {
-        id: label
-
+    Row {
+        id: row
         anchors.centerIn: parent
-        text: button.text.toUpperCase()
+        spacing: units.dp(10)
 
-        color: button.textColor
+        Icon {
+            anchors.verticalCenter: parent.verticalCenter
+            name: button.iconName
+            color: "white"
+            visible: name != ""
+        }
 
-        style: "button"
+        Label {
+            id: label
+
+            anchors.verticalCenter: parent.verticalCenter
+            text: button.text.toUpperCase()
+
+            color: button.textColor
+
+            style: "button"
+        }
+    }
+
+    QtObject {
+        id: buttonType
+        property int floating: 1
+        property int raised: 2
+        property int flat: 3
     }
 }

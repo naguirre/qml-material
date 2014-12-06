@@ -3,7 +3,8 @@ import Material 0.1
 
 ApplicationWindow {
     initialPage: page
-
+    width: units.dp(480)
+    height: units.dp(272)
     Page {
         id: page
 
@@ -20,8 +21,20 @@ ApplicationWindow {
 
             Button {
                 anchors.horizontalCenter: parent.horizontalCenter
+                iconName: "content/add"
+                type: buttonType.floating
+                onTriggered: pageStack.push(Qt.resolvedUrl("SubPage.qml"))
+            }
+            Button {
+                anchors.horizontalCenter: parent.horizontalCente
+                text: "Accept"
+                type: buttonType.flat
+                onTriggered: pageStack.push(Qt.resolvedUrl("SubPage.qml"))
+            }
+
+            Button {
+                anchors.horizontalCenter: parent.horizontalCenter
                 text: "Open sub page!"
-                elevation: 1
                 onTriggered: pageStack.push(Qt.resolvedUrl("SubPage.qml"))
             }
         }
